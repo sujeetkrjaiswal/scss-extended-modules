@@ -1,0 +1,26 @@
+@use "sass:map";
+@use "sass:list";
+
+$-empty: map.remove(
+  (
+    'x': 1,
+  ),
+  'x'
+);
+
+// Generation methods
+@function new() {
+  @return $-empty;
+}
+
+// Validation methods
+@function is($map) {
+  $-typeOf: type-of(
+    $value: $map,
+  );
+  @return $-typeOf == 'map' or ($-typeOf == 'list' and list.length($map) == 0);
+}
+
+@function is-non-empty($map) {
+  @return type-of($value: $map) and list.length($map) > 0;
+}

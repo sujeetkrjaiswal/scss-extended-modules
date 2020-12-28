@@ -1,0 +1,39 @@
+{
+  "name": "scss-extended-modules",
+  "version": "1.0.0",
+  "description": "Extended Built-in modules for scss with useful functions",
+  "main": "src/index.scss",
+  "scripts": {
+    "format": "prettier --write './src/*.scss'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sujeetkrjaiswal/scss-extended-modules.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sujeetkrjaiswal/scss-extended-modules/issues"
+  },
+  "homepage": "https://github.com/sujeetkrjaiswal/scss-extended-modules#readme",
+  "devDependencies": {
+    "@commitlint/cli": "^11.0.0",
+    "@commitlint/config-conventional": "^11.0.0",
+    "husky": "^4.3.6",
+    "lint-staged": "^10.5.3",
+    "prettier": "^2.2.1",
+    "stylelint": "^13.8.0",
+    "stylelint-config-prettier": "^8.0.2",
+    "stylelint-config-sass-guidelines": "^7.1.0"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
+  }
+}
