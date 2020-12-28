@@ -1,0 +1,8 @@
+// @use "../src/index" as all;
+
+$is: true;
+.x {
+  @if $is == false {
+    @error "Invalid";
+  }
+}

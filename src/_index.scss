@@ -1,5 +1,5 @@
-@forward './elist';
-@forward './emap';
-@forward './emath';
-@forward './eselector';
-@forward './estring';
+@forward './elist' as elist-*;
+@forward './emap' as emap-*;
+@forward './emath' as emath-*;
+@forward './eselector' as eselector-*;
+@forward './estring' as estring-*;
