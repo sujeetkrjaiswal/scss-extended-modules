@@ -1,1 +1,9 @@
 @use "sass:list";
+
+@function is($list) {
+  @return type-of($value: $list) == 'list';
+}
+
+@function is-non-empty($list) {
+  @return is($list) and list.length($list) > 0;
+}
