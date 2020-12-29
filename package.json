@@ -1,6 +1,6 @@
 {
   "name": "scss-extended-modules",
-  "version": "1.0.1-2",
+  "version": "1.0.1-3",
   "description": "Extended Built-in modules for scss with useful functions",
   "main": "src/_index.scss",
   "files": [
