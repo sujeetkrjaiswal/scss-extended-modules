@@ -1,6 +1,8 @@
-@use "sass:selector";
-@use "sass:string";
+@use 'sass:selector';
+@use 'sass:string';
+@use 'estring';
 
 @function is-classname-selector($selector) {
-  @return string.slice($selector, 1, 1) == '.';
+  @return estring.is($selector) and string.length($selector) > 1 and
+    string.slice($selector, 1, 1) == '.';
 }

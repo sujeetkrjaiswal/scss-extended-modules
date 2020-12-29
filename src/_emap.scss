@@ -1,5 +1,6 @@
-@use "sass:map";
-@use "sass:list";
+@use 'sass:map';
+@use 'sass:list';
+@use 'sass:meta';
 
 $-empty: map.remove(
   (
@@ -15,12 +16,29 @@ $-empty: map.remove(
 
 // Validation methods
 @function is($map) {
-  $-typeOf: type-of(
-    $value: $map,
-  );
+  $-typeOf: meta.type-of($map);
   @return $-typeOf == 'map' or ($-typeOf == 'list' and list.length($map) == 0);
 }
 
 @function is-non-empty($map) {
-  @return type-of($value: $map) and list.length($map) > 0;
+  @return is($map) and list.length($map) > 0;
+}
+
+@function merge-all($maps...) {
+  $merged: $-empty;
+  @each $map in $maps {
+    @if is($map) {
+      $merged: map.merge($merged, $map);
+    }
+  }
+  @return $merged;
+}
+
+@function set($map, $key, $value) {
+  @return map.merge(
+    $map,
+    (
+      $key: $value,
+    )
+  );
 }

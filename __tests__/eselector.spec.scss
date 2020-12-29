@@ -1,0 +1,17 @@
+@use 'emodule';
+@use 'true' as test;
+
+@include test.describe('eselector: is-classname-selector') {
+  @include test.it('valid classnames') {
+    @include test.assert-true(emodule.eselector-is-classname-selector('.a'));
+  }
+
+  @include test.it('invalid classnames') {
+    @include test.assert-false(emodule.eselector-is-classname-selector(null));
+    @include test.assert-false(emodule.eselector-is-classname-selector(''));
+    @include test.assert-false(emodule.eselector-is-classname-selector('.'));
+    @include test.assert-false(emodule.eselector-is-classname-selector('a'));
+  }
+}
+
+@include test.print('eselector-spec');

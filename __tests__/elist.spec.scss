@@ -1,0 +1,104 @@
+@use 'sass:meta';
+@use 'true' as test;
+@use 'emodule';
+
+@include test.describe('Elist: is') {
+  @include test.it('for non-list') {
+    @include test.assert-false(emodule.elist-is(null));
+    @include test.assert-false(emodule.elist-is(true));
+    @include test.assert-false(emodule.elist-is(1));
+    @include test.assert-false(emodule.elist-is('test string'));
+  }
+
+  @include test.it('emodule.elist-is for empty list') {
+    @include test.assert-true(emodule.elist-is(()));
+  }
+
+  @include test.it('emodule.elist-is for non-empty list') {
+    @include test.assert-true(emodule.elist-is((1, 2)));
+  }
+}
+
+@include test.describe('elist: is-non-empty') {
+  @include test.it('for empty list') {
+    @include test.assert-false(emodule.elist-is-non-empty(()));
+  }
+
+  @include test.it('non-empty list') {
+    @include test.assert-true(emodule.elist-is-non-empty((1, 2)));
+  }
+
+  @include test.it('non list') {
+    @include test.assert-false(emodule.elist-is(null));
+    @include test.assert-false(emodule.elist-is(true));
+    @include test.assert-false(emodule.elist-is(1));
+    @include test.assert-false(emodule.elist-is('test string'));
+  }
+}
+
+@include test.describe('elist: join-all') {
+  @include test.it('joins strings lists') {
+    @include test.assert-equal(
+      emodule.elist-join-all(('a', 'b'), ('c', 'd', 'e'), ('f', 'g')),
+      [ 'a',
+      'b',
+      'c',
+      'd',
+      'e',
+      'f',
+      'g' ]
+    );
+  }
+}
+
+@function elist-spec-is-one($value) {
+  @return $value == 1;
+}
+
+@include test.describe('elist: find') {
+  $list: [null, '', 1, [1, 2]];
+  @include test.it('find using emodule.elist-is') {
+    $-predicate: meta.get-function(elist-is, $module: emodule);
+    @include test.assert-equal(emodule.elist-find($list, $-predicate), [1, 2]);
+  }
+
+  @include test.it('find using custom local methods (= 1)') {
+    $-predicate: meta.get-function(elist-spec-is-one);
+    @include test.assert-equal(emodule.elist-find($list, $-predicate), 1);
+  }
+}
+
+@include test.describe('eslit: some') {
+  $list: [10, 12, 14, 16, 17];
+
+  @include test.it('some is odd') {
+    $-predicate: meta.get-function(emath-is-odd, $module: emodule);
+    @include test.assert-true(emodule.elist-some($list, $-predicate));
+  }
+}
+
+@include test.describe('eslit: every') {
+  @include test.it('invalid every is odd ') {
+    $list: [10, 12, 14, 16, 17];
+    $-predicate: meta.get-function(emath-is-odd, $module: emodule);
+    @include test.assert-false(emodule.elist-every($list, $-predicate));
+  }
+  @include test.it('valid every is odd ') {
+    $list: [11, 13, 15, 17];
+    $-predicate: meta.get-function(emath-is-odd, $module: emodule);
+    @include test.assert-true(emodule.elist-every($list, $-predicate));
+  }
+}
+
+@include test.describe('eslit: filter') {
+  $list: [10, 12, 14, 16, 17];
+
+  @include test.it('some is odd') {
+    $-predicate: meta.get-function(emath-is-even, $module: emodule);
+    @include test.assert-equal(
+      emodule.elist-filter($list, $-predicate),
+      [10 12 14 16]
+    );
+  }
+}
+@include test.print('elist-spec');

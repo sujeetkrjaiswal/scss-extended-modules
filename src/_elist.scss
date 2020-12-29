@@ -1,9 +1,125 @@
-@use "sass:list";
+@use 'sass:list';
+@use 'sass:meta';
+
+// Internal methods
+
+@function -list-cb-props(
+  $list,
+  $reversed: false,
+  $with-index: false,
+  $with-list: false
+) {
+  @if list.length($list) == 0 {
+    @return null;
+  }
+  $-startIdx: 1;
+  $-endIdx: list.length($list);
+  @if ($reversed) {
+    $-temp: $-startIdx;
+    $-startIdx: $-endIdx;
+    $-endIdx: $-temp;
+  }
+  $-props-list: [];
+  @for $i from $-startIdx through $-endIdx {
+    $value: list.nth($list, $i);
+    $-props: [$value];
+    @if $with-index {
+      $-props: list.append($-props, $i);
+    }
+    @if $with-list {
+      $-props: list.append($-props, $list);
+    }
+    $-props-list: list.append($-props-list, $-props);
+  }
+  @return $-props-list;
+}
+
+// Public methods
 
 @function is($list) {
-  @return type-of($value: $list) == 'list';
+  @return meta.type-of($list) == 'list';
 }
 
 @function is-non-empty($list) {
   @return is($list) and list.length($list) > 0;
+}
+
+@function join-all($lists...) {
+  $-joinedList: [];
+  @each $-list in $lists {
+    @if is($-list) and list.length($-list) > 0 {
+      $-joinedList: list.join($-joinedList, $-list);
+    } @else {
+      @warn 'Ignored: found empty list or non-list';
+    }
+  }
+  @return $-joinedList;
+}
+
+@function find(
+  $list,
+  $predicate,
+  $reversed: false,
+  $with-index: false,
+  $with-list: false
+) {
+  $-props-list: -list-cb-props(
+    $list: $list,
+    $reversed: $reversed,
+    $with-index: $with-index,
+    $with-list: $with-list,
+  );
+
+  @each $-props in $-props-list {
+    @if meta.call($predicate, $-props...) {
+      @return list.nth($-props, 1);
+    }
+  }
+  @return null;
+}
+
+@function some($list, $predicate, $with-index: false, $with-list: false) {
+  $-props-list: -list-cb-props(
+    $list: $list,
+    $reversed: false,
+    $with-index: $with-index,
+    $with-list: $with-list,
+  );
+  @each $-props in $-props-list {
+    @if meta.call($predicate, $-props...) {
+      @return true;
+    }
+  }
+  @return false;
+}
+
+@function every($list, $predicate, $with-index: false, $with-list: false) {
+  $-props-list: -list-cb-props(
+    $list: $list,
+    $reversed: false,
+    $with-index: $with-index,
+    $with-list: $with-list,
+  );
+  @each $-props in $-props-list {
+    @if not meta.call($predicate, $-props...) {
+      @return false;
+    }
+  }
+  @return true;
+}
+
+@function filter($list, $predicate, $with-index: false, $with-list: false) {
+  $-props-list: -list-cb-props(
+    $list: $list,
+    $reversed: false,
+    $with-index: $with-index,
+    $with-list: $with-list,
+  );
+  $-filtered: [];
+  @each $-props in $-props-list {
+    @if meta.call($predicate, $-props...) {
+      $-filtered: list.append($-filtered, list.nth($-props, 1));
+    }
+  }
+  @return $-filtered;
 }

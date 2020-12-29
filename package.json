@@ -7,11 +7,14 @@
     "src/*.scss"
   ],
   "scripts": {
+    "fix": "npm run format && npm run lint:fix",
     "format": "prettier --write './src/*.scss'",
     "release": "np",
+    "lint": "stylelint 'src/**/*.scss' '__tests__/**/*.scss'",
+    "lint:fix": "stylelint --fix 'src/**/*.scss' '__tests__/**/*.scss'",
     "test-jest": "jest",
-    "test": "sass src/__tests__:dist/__tests__",
-    "test:watch": "sass --watch src/__tests__:dist/__tests__"
+    "test": "sass __tests__:dist/__tests__",
+    "test:watch": "sass --watch __tests__:dist/__tests__"
   },
   "repository": {
     "type": "git",
@@ -38,7 +41,7 @@
     "sass-true": "^6.0.1",
     "stylelint": "^13.8.0",
     "stylelint-config-prettier": "^8.0.2",
-    "stylelint-config-sass-guidelines": "^7.1.0"
+    "stylelint-scss": "^3.18.0"
   },
   "peerDependencies": {
     "sass": "^1.30.0"

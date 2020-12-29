@@ -1,0 +1,120 @@
+@use 'sass:list';
+@use 'sass:meta';
+@use 'true' as test;
+@use 'emodule';
+
+@include test.describe('emap:new') {
+  $new: emodule.emap-new();
+
+  @include test.it('length: 0') {
+    @include test.assert-equal(list.length($new), 0);
+  }
+  @include test.it('type of = map') {
+    @include test.assert-equal(meta.type-of($new), 'map');
+  }
+}
+
+@include test.describe('emap:is') {
+  @include test.it('test new map') {
+    @include test.assert-true(emodule.emap-is(emodule.emap-new()));
+    @include test.assert-true(emodule.emap-is([]));
+  }
+  @include test.it('test non-map') {
+    @include test.assert-false(emodule.emap-is(null));
+    @include test.assert-false(emodule.emap-is('null'));
+    @include test.assert-false(emodule.emap-is(1));
+    @include test.assert-false(emodule.emap-is([1]));
+  }
+}
+
+@include test.describe('emap:is-non-empty') {
+  @include test.it('test non-empty map') {
+    $non-empty-map: (
+      a: 1,
+      b: 2,
+    );
+    @include test.assert-true(emodule.emap-is-non-empty($non-empty-map));
+  }
+  @include test.it('empty maps and list') {
+    @include test.assert-false(
+      emodule.emap-is-non-empty(emodule.emap-new()),
+      'empty map'
+    );
+    @include test.assert-false(emodule.emap-is-non-empty([]), 'empty list');
+  }
+  @include test.it('test non-map') {
+    @include test.assert-false(emodule.emap-is-non-empty(null), 'null');
+    @include test.assert-false(emodule.emap-is-non-empty('null'), 'string');
+    @include test.assert-false(emodule.emap-is-non-empty(1), 'number');
+    @include test.assert-false(
+      emodule.emap-is-non-empty([1]),
+      'non empty list'
+    );
+  }
+}
+
+@include test.describe('emap:merge-all') {
+  $map1: (
+    a: 11,
+  );
+  $map2: (
+    a: 21,
+    b: 22,
+    c: 23,
+  );
+  $map3: (
+    c: 31,
+    d: 32,
+  );
+  @include test.it('no overlap maps') {
+    @include test.assert-equal(
+      emodule.emap-merge-all($map1, $map3),
+      (
+        a: 11,
+        c: 31,
+        d: 32,
+      )
+    );
+  }
+  @include test.it('with overlapping maps') {
+    @include test.assert-equal(
+      emodule.emap-merge-all($map2, $map3),
+      (
+        a: 21,
+        b: 22,
+        c: 31,
+        d: 32,
+      )
+    );
+  }
+}
+
+@include test.describe('emap.set') {
+  $base-map: (
+    a: 1,
+    b: 2,
+    c: 3,
+  );
+  @include test.it('set new key') {
+    @include test.assert-equal(
+      emodule.emap-set($base-map, 'd', 4),
+      (
+        a: 1,
+        b: 2,
+        c: 3,
+        d: 4,
+      )
+    );
+  }
+  @include test.it('override key') {
+    @include test.assert-equal(
+      emodule.emap-set($base-map, 'c', 4),
+      (
+        a: 1,
+        b: 2,
+        c: 4,
+      )
+    );
+  }
+}
+@include test.print('emap-spec');

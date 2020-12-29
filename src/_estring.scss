@@ -1,9 +1,48 @@
-@use "sass:string";
+@use 'sass:meta';
+@use 'sass:string';
+@use 'sass:math';
 
 @function is($string) {
-  @return type-of($value: $string) == 'string';
+  @return meta.type-of($string) == 'string';
 }
 
 @function is-non-empty($string) {
   @return is($string) and string.length($string) > 0;
+}
+
+@function repeat($string, $n: 1) {
+  @if $n <= 0 {
+    @return '';
+  }
+  $nf: math.floor($n);
+  $value: '';
+  @for $i from 1 through $nf {
+    $value: $value + $string;
+  }
+  @return $value;
+}
+
+@function join-all($separator, $strings...) {
+  $-concatenated: '';
+  @each $-string in $strings {
+    @if is($-string) {
+      $-concatenated: $-concatenated + $separator + $-string;
+    }
+  }
+  @return string.slice(
+    $-concatenated,
+    string.length($separator) + 1,
+    string.length($-concatenated)
+  );
+}
+
+@function starts-with($string, $sub-str) {
+  $-subStr: string.slice($string, 1, string.length($sub-str));
+  @return $-subStr == $sub-str;
+}
+
+@function ends-with($string, $sub-str) {
+  $-len: string.length($string);
+  $-subStr: string.slice($string, $-len + 1 - string.length($sub-str), $-len);
+  @return $-subStr == $sub-str;
 }

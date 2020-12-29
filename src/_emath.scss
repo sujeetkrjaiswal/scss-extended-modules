@@ -1,11 +1,45 @@
-@use "sass:math";
-@use "sass:list";
+@use 'sass:math';
+@use 'sass:list';
 
-@function pow-series($base, $pow) {
-  $series: ();
-  $value: 1;
-  @for $i from 1 through $pow {
-    $value: $value & $base;
+@function sign($num) {
+  @if $num < 0 {
+    @return -1;
+  }
+  @return 1;
+}
+
+@function mod($dividend, $divisor) {
+  // mod(a, n) = a - n * floor(a / n) by Donald Knuth
+  $-quotient: math.floor($dividend / $divisor);
+  @return $dividend - ($divisor * $-quotient);
+}
+
+@function js-mod($dividend, $divisor) {
+  $-sign: sign($dividend);
+  @return $-sign * mod(math.abs($dividend), math.abs($divisor));
+}
+
+@function is-even($value) {
+  @return mod($value, 2) == 0;
+}
+
+@function is-odd($value) {
+  @return not is-even($value);
+}
+
+@function pow-series($base, $pow-start, $pow-end) {
+  $series: [];
+  $value: math.pow($base, $pow-start - 1);
+  @if ($base == 0 or $base == -0) and $pow-start < 0 {
+    @for $i from $pow-start through -1 {
+      $series: list.append($series, math.pow($base, $i));
+    }
+    $value: 0;
+    $pow-start: 0;
+  }
+
+  @for $i from $pow-start through $pow-end {
+    $value: $value * $base;
     $series: list.append($series, $value);
   }
   @return $series;

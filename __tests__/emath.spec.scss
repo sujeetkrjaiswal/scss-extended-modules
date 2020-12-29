@@ -1,0 +1,106 @@
+@use 'emodule';
+@use 'true' as test;
+
+@include test.describe('emath:sign') {
+  @include test.it('positive signs') {
+    @include test.assert-equal(emodule.emath-sign(0), 1, '0');
+    @include test.assert-equal(emodule.emath-sign(-0), 1, '-0');
+    @include test.assert-equal(emodule.emath-sign(2), 1, '2');
+  }
+  @include test.it('negative signs') {
+    @include test.assert-equal(emodule.emath-sign(-2), -1, '-2');
+  }
+}
+
+@include test.describe('emath:mod') {
+  @include test.it('no mod') {
+    @include test.assert-equal(emodule.emath-mod(10, 2), 0);
+  }
+  @include test.it('positive mod') {
+    @include test.assert-equal(emodule.emath-mod(10, 3), 1);
+    @include test.assert-equal(emodule.emath-mod(10, 4), 2);
+  }
+
+  @include test.it('Python/Ruby like mod') {
+    // https://torstencurdt.com/tech/posts/modulo-of-negative-numbers
+    @include test.assert-equal(emodule.emath-mod(13, 3), 1);
+    @include test.assert-equal(emodule.emath-mod(-13, 3), 2);
+    @include test.assert-equal(emodule.emath-mod(13, -3), -2);
+    @include test.assert-equal(emodule.emath-mod(-13, -3), -1);
+  }
+}
+
+@include test.describe('emath: js-mod') {
+  @include test.it('javascript like mod') {
+    // https://torstencurdt.com/tech/posts/modulo-of-negative-numbers
+    @include test.assert-equal(emodule.emath-js-mod(13, 3), 1);
+    @include test.assert-equal(emodule.emath-js-mod(-13, 3), -1);
+    @include test.assert-equal(emodule.emath-js-mod(13, -3), 1);
+    @include test.assert-equal(emodule.emath-js-mod(-13, -3), -1);
+  }
+}
+
+@include test.describe('emath:is-even') {
+  @include test.it('odd numbers') {
+    @include test.assert-false(emodule.emath-is-even(-1));
+    @include test.assert-false(emodule.emath-is-even(1));
+    @include test.assert-false(emodule.emath-is-even(7));
+  }
+
+  @include test.it('even numbers') {
+    @include test.assert-true(emodule.emath-is-even(-2));
+    @include test.assert-true(emodule.emath-is-even(0));
+    @include test.assert-true(emodule.emath-is-even(2));
+  }
+}
+
+@include test.describe('emath:is-odd') {
+  @include test.it('odd numbers') {
+    @include test.assert-true(emodule.emath-is-odd(-1));
+    @include test.assert-true(emodule.emath-is-odd(1));
+    @include test.assert-true(emodule.emath-is-odd(7));
+  }
+
+  @include test.it('even numbers') {
+    @include test.assert-false(emodule.emath-is-odd(-2));
+    @include test.assert-false(emodule.emath-is-odd(0));
+    @include test.assert-false(emodule.emath-is-odd(2));
+  }
+}
+
+@include test.describe('emath:pow-series') {
+  @include test.it('negative number') {
+    @include test.assert-equal(
+      emodule.emath-pow-series(-1, -3, 3),
+      [-1 1 -1 1 -1 1 -1],
+      '-1^(-3 to 3)',
+      true
+    );
+  }
+
+  @include test.it('zero positive and negative') {
+    @include test.assert-equal(
+      emodule.emath-pow-series(0, -3, 3),
+      [Infinity Infinity Infinity 0 0 0 0],
+      '0^(-3 to 3)',
+      true
+    );
+    @include test.assert-equal(
+      emodule.emath-pow-series(-0, -3, 3),
+      [-Infinity Infinity -Infinity 0 0 0 0],
+      '-0^(-3 to 3)',
+      true
+    );
+  }
+
+  @include test.it('positive number') {
+    @include test.assert-equal(
+      emodule.emath-pow-series(1, -3, 3),
+      [1 1 1 1 1 1 1],
+      '1^(-3 to 3)',
+      true
+    );
+  }
+}
+
+@include test.print('emath-spec');

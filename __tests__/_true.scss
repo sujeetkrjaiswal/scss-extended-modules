@@ -1,0 +1,13 @@
+@use 'sass:string';
+@use '../src/estring';
+@use '../node_modules/sass-true/sass/true';
+$terminal-output: true;
+@forward '../node_modules/sass-true/sass/true';
+
+@mixin print($heading) {
+  $available: 50- string.length($heading);
+  $divider: estring.repeat('-', $available / 2);
+  @debug estring.join-all(' ', $divider, $heading, $divider);
+  @include true.report;
+  @debug estring.repeat('-', 50);
+}

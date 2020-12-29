@@ -1,0 +1,107 @@
+@use 'emodule';
+@use 'true' as test;
+
+@include test.describe('estring:is') {
+  @include test.it('is string') {
+    @include test.assert-true(emodule.estring-is(''));
+    @include test.assert-true(emodule.estring-is('dfs'));
+  }
+  @include test.it('not string') {
+    @include test.assert-false(emodule.estring-is(1));
+    @include test.assert-false(emodule.estring-is(true));
+    @include test.assert-false(emodule.estring-is(null));
+    @include test.assert-false(emodule.estring-is([]));
+    @include test.assert-false(emodule.estring-is(emodule.emap-new()));
+    @include test.assert-false(emodule.estring-is(red));
+  }
+}
+
+@include test.describe('estring:is-non-empty') {
+  @include test.it('is empty string') {
+    @include test.assert-false(emodule.estring-is-non-empty(''));
+  }
+  @include test.it('is string') {
+    @include test.assert-true(emodule.estring-is-non-empty(' dfs '));
+    @include test.assert-true(emodule.estring-is-non-empty('dfs'));
+  }
+  @include test.it('not string') {
+    @include test.assert-false(emodule.estring-is-non-empty(1));
+    @include test.assert-false(emodule.estring-is-non-empty(true));
+    @include test.assert-false(emodule.estring-is-non-empty(null));
+    @include test.assert-false(emodule.estring-is-non-empty([]));
+    @include test.assert-false(
+      emodule.estring-is-non-empty(emodule.emap-new())
+    );
+    @include test.assert-false(emodule.estring-is-non-empty(red));
+  }
+}
+
+@include test.describe('estring:repeat') {
+  @include test.it('default') {
+    @include test.assert-equal(emodule.estring-repeat('a'), 'a');
+    @include test.assert-equal(emodule.estring-repeat(null), '');
+  }
+  @include test.it('postive repeation') {
+    @include test.assert-equal(emodule.estring-repeat('', 2), '');
+    @include test.assert-equal(emodule.estring-repeat('a', 2), 'aa');
+    @include test.assert-equal(emodule.estring-repeat('ab', 5), 'ababababab');
+  }
+  @include test.it('zero repeation') {
+    @include test.assert-equal(emodule.estring-repeat('', 0), '');
+    @include test.assert-equal(emodule.estring-repeat('ab', 0), '');
+  }
+  @include test.it('negative repeation') {
+    @include test.assert-equal(emodule.estring-repeat('', -1), '');
+    @include test.assert-equal(emodule.estring-repeat('ab', -2), '');
+  }
+}
+
+@include test.describe('estring:join-all') {
+  @include test.it('No separators') {
+    @include test.assert-equal(emodule.estring-join-all(''), '');
+    @include test.assert-equal(emodule.estring-join-all('', 'a'), 'a');
+    @include test.assert-equal(emodule.estring-join-all('', 'a', 'b'), 'ab');
+    @include test.assert-equal(emodule.estring-join-all('', 'a', 1, 'b'), 'ab');
+  }
+  @include test.it('with separators') {
+    @include test.assert-equal(emodule.estring-join-all('-'), '');
+    @include test.assert-equal(emodule.estring-join-all('-', 'a'), 'a');
+    @include test.assert-equal(emodule.estring-join-all('-', 'a', 'b'), 'a-b');
+    @include test.assert-equal(
+      emodule.estring-join-all('-', 'a', 1, 'b'),
+      'a-b'
+    );
+  }
+}
+
+@include test.describe('estring:starts-with') {
+  @include test.it('valid cases') {
+    @include test.assert-true(emodule.estring-starts-with('hello', ''));
+    @include test.assert-true(emodule.estring-starts-with('hello', 'h'));
+    @include test.assert-true(emodule.estring-starts-with('hello', 'he'));
+    @include test.assert-true(emodule.estring-starts-with('hello', 'hello'));
+  }
+  @include test.it('invalid cases') {
+    @include test.assert-false(emodule.estring-starts-with('hello', 'ello'));
+    @include test.assert-false(emodule.estring-starts-with('hello', 'hllo'));
+    @include test.assert-false(emodule.estring-starts-with('hello', 'ho'));
+    @include test.assert-false(emodule.estring-starts-with('hello', 'hellos'));
+  }
+}
+
+@include test.describe('estring:ends-with') {
+  @include test.it('valid cases') {
+    @include test.assert-true(emodule.estring-ends-with('hello', ''));
+    @include test.assert-true(emodule.estring-ends-with('hello', 'o'));
+    @include test.assert-true(emodule.estring-ends-with('hello', 'llo'));
+    @include test.assert-true(emodule.estring-ends-with('hello', 'hello'));
+  }
+  @include test.it('invalid cases') {
+    @include test.assert-false(emodule.estring-ends-with('hello', 'ell'));
+    @include test.assert-false(emodule.estring-ends-with('hello', 'hell'));
+    @include test.assert-false(emodule.estring-ends-with('hello', 'ho'));
+    @include test.assert-false(emodule.estring-starts-with('hello', 'xhello'));
+  }
+}
+
+@include test.print('estring-spec');
