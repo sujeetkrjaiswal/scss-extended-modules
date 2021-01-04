@@ -8,7 +8,7 @@
   ],
   "scripts": {
     "fix": "npm run format && npm run lint:fix",
-    "format": "prettier --write './src/*.scss'",
+    "format": "prettier --write './src/*.scss' './__tests__/*.scss'",
     "release": "np",
     "lint": "stylelint 'src/**/*.scss' '__tests__/**/*.scss'",
     "lint:fix": "stylelint --fix 'src/**/*.scss' '__tests__/**/*.scss'",
@@ -18,15 +18,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sujeetkrjaiswal/scss-extended-modules.git"
+    "url": "git+https://github.com/scss-toolkit/extended-modules.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Sujeet Kumar Jaiswal",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/sujeetkrjaiswal/scss-extended-modules/issues"
+    "url": "https://github.com/scss-toolkit/extended-modules/issues"
   },
-  "homepage": "https://github.com/sujeetkrjaiswal/scss-extended-modules#readme",
+  "homepage": "https://scss-toolkit.github.io/extended-modules",
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
   },
@@ -39,9 +39,7 @@
     "prettier": "^2.2.1",
     "sass": "^1.30.0",
     "sass-true": "^6.0.1",
-    "stylelint": "^13.8.0",
-    "stylelint-config-prettier": "^8.0.2",
-    "stylelint-scss": "^3.18.0"
+    "stylelint": "^13.8.0"
   },
   "peerDependencies": {
     "sass": "^1.30.0"
@@ -57,5 +55,8 @@
   },
   "np": {
     "yarn": false
+  },
+  "dependencies": {
+    "@scss-toolkit/config-stylelint": "^1.0.1"
   }
 }

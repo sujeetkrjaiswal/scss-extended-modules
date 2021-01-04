@@ -12,15 +12,15 @@
   @if list.length($list) == 0 {
     @return null;
   }
-  $-startIdx: 1;
-  $-endIdx: list.length($list);
+  $-start-idx: 1;
+  $-end-idx: list.length($list);
   @if ($reversed) {
-    $-temp: $-startIdx;
-    $-startIdx: $-endIdx;
-    $-endIdx: $-temp;
+    $-temp: $-start-idx;
+    $-start-idx: $-endIdx;
+    $-end-idx: $-temp;
   }
   $-props-list: [];
-  @for $i from $-startIdx through $-endIdx {
+  @for $i from $-start-idx through $-end-idx {
     $value: list.nth($list, $i);
     $-props: [$value];
     @if $with-index {
@@ -45,15 +45,15 @@
 }
 
 @function join-all($lists...) {
-  $-joinedList: [];
+  $-joined-list: [];
   @each $-list in $lists {
-    @if is($-list) and list.length($-list) > 0 {
-      $-joinedList: list.join($-joinedList, $-list);
+    @if is-non-empty($-list) {
+      $-joined-list: list.join($-joined-list, $-list);
     } @else {
       @warn 'Ignored: found empty list or non-list';
     }
   }
-  @return $-joinedList;
+  @return $-joined-list;
 }
 
 @function find(

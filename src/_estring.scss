@@ -37,12 +37,16 @@
 }
 
 @function starts-with($string, $sub-str) {
-  $-subStr: string.slice($string, 1, string.length($sub-str));
-  @return $-subStr == $sub-str;
+  $-start-string: string.slice($string, 1, string.length($sub-str));
+  @return $-start-string == $sub-str;
 }
 
 @function ends-with($string, $sub-str) {
   $-len: string.length($string);
-  $-subStr: string.slice($string, $-len + 1 - string.length($sub-str), $-len);
-  @return $-subStr == $sub-str;
+  $-end-string: string.slice(
+    $string,
+    $-len + 1 - string.length($sub-str),
+    $-len
+  );
+  @return $-end-string == $sub-str;
 }

@@ -1,3 +1,5 @@
+/* stylelint-disable at-rule-disallowed-list */
+
 @use 'sass:string';
 @use '../src/estring';
 @use '../node_modules/sass-true/sass/true';
@@ -11,3 +13,5 @@ $terminal-output: true;
   @include true.report;
   @debug estring.repeat('-', 50);
 }
+
+/* stylelint-enable at-rule-disallowed-list */

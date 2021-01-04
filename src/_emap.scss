@@ -16,8 +16,8 @@ $-empty: map.remove(
 
 // Validation methods
 @function is($map) {
-  $-typeOf: meta.type-of($map);
-  @return $-typeOf == 'map' or ($-typeOf == 'list' and list.length($map) == 0);
+  $-type-of: meta.type-of($map);
+  @return $-type-of == 'map' or ($-type-of == 'list' and list.length($map) == 0);
 }
 
 @function is-non-empty($map) {
@@ -27,7 +27,7 @@ $-empty: map.remove(
 @function merge-all($maps...) {
   $merged: $-empty;
   @each $map in $maps {
-    @if is($map) {
+    @if is-non-empty($map) {
       $merged: map.merge($merged, $map);
     }
   }
